@@ -120,6 +120,73 @@ def load_Project_page():
     else:
         st.header('Company_Wise Analysis')
 
+        st.header('Top 20 Companies have most jobs')
+        aa2 = df.hotel_name.value_counts().head(20).reset_index(name='counts').rename(columns={'index': 'Company'})
+        fig = px.bar(aa2, x='hotel_name', y='counts', text_auto=True)
+        fig.update_layout(width=1400, height=500)
+        st.plotly_chart(fig)
+
+        st.header('Top 20 Comppanies have most Jobs-Type')
+        cc = df.hotel_name.value_counts(ascending=False).head(20).index.to_list()
+        pivot = df[df['hotel_name'].isin(cc)].pivot_table(index='hotel_name', columns='job_type', aggfunc='size').fillna(
+            '0')
+        pivot = pivot.drop(columns=[' Part-time,Traineeship', ' Traineeship,Part-time'])
+
+        pivot = pivot.stack()
+        pivot = pivot.reset_index(name='counts')
+        fig = px.bar(pivot, x='hotel_name', y='counts', color='job_type', barmode='group', text='counts', log_y=True,
+                     color_continuous_scale='viridis')
+        fig.update_layout(width=1400, height=500)
+        st.plotly_chart(fig)
+
+
+
+
+        btn=st.selectbox('select one Company',sorted(df.hotel_name.str.strip().unique().tolist()))
+        st.title(btn)
+        st.header('Types Of Jobs Available In This Company')
+
+        col1,col2=st.columns(2)
+        with col1:
+
+            sd = df[df.hotel_name == btn]['job_type'].value_counts().reset_index(name='count').rename(columns={'index': 'job type'})
+            fig=px.bar(sd, x='job_type', y='count', text_auto=True)
+            st.plotly_chart(fig)
+
+        with col2:
+            frame=df[df.hotel_name == btn]['job_type'].value_counts().reset_index(name='counts').rename(columns={'index': 'job type'})
+            st.dataframe(frame)
+
+
+        col1,col2=st.columns(2)
+        with col1:
+            st.header('Cities Name Where The Jobs Is Available')
+            ss = df[df.hotel_name == btn].city.value_counts().reset_index(name='counts').rename(
+                columns={'index': 'hotel_name'}).head(20)
+            fig=px.pie(ss, values='counts', names='city')
+            fig.update_layout(width=500,height=400)
+            st.plotly_chart(fig)
+
+        with col2:
+            st.header('Country Name Where The Jobs Is Available')
+            ss = df[df.hotel_name == btn].country.value_counts().reset_index(name='counts').rename(
+                columns={'index': 'hotel_name'}).head(20)
+            fig=px.pie(ss, values='counts', names='country')
+            fig.update_layout(width=500, height=400)
+            st.plotly_chart(fig)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def load_contact_page():
     st.title('WELCOME TO CONTACT PAGE')
