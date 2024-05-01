@@ -5,7 +5,7 @@ import seaborn as sns
 
 # Load your DataFrame
 df = pd.read_csv('new_data.csv')
-
+df['country']=df.country.str.strip()
 # Streamlit setup
 st.set_page_config(layout='wide', page_title='ONWAY.COM')
 
@@ -85,8 +85,34 @@ def load_Project_page():
         st.plotly_chart(fig)
 
 
-    elif box == 'Country_Wise Analysis':
-        st.header('Country_Wise Analysis')
+        btn=st.selectbox('select one country',sorted(df.country.str.strip().unique().tolist()))
+        st.title(btn)
+        st.header('Types Of Jobs Available In This Country')
+
+        col1,col2=st.columns(2)
+        with col1:
+
+            sd = df[df.country == btn]['job_type'].value_counts().reset_index(name='count').rename(columns={'index': 'job type'})
+            fig=px.bar(sd, x='job_type', y='count', text_auto=True)
+            st.plotly_chart(fig)
+
+        with col2:
+            frame=df[df.country == btn]['job_type'].value_counts().reset_index(name='counts').rename(columns={'index': 'job type'})
+            st.dataframe(frame)
+
+
+        col1,col2=st.columns(2)
+        with col1:
+            st.header('Cities In This Country Have Jobs')
+            ss = df[df.country == btn].city.value_counts().reset_index(name='counts').rename(
+                columns={'index': 'city'}).head(20)
+            fig=px.pie(ss, values='counts', names='city')
+            st.plotly_chart(fig)
+
+
+
+
+
 
     elif box == 'Jobs Analysis':
         st.header('Jobs Analysis')
