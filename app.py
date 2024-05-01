@@ -18,8 +18,7 @@ def load_home_page():
 def load_Project_page():
     st.title('WELCOME TO PROJECT PAGE ')
 
-    box = st.selectbox('Select one',
-                       ['Overall Analysis', 'Country_Wise Analysis', 'Jobs Analysis', 'Company_Wise Analysis'])
+    box= st.selectbox('Select one',['Overall Analysis', 'Country_Wise Analysis', 'Jobs Analysis', 'Company_Wise Analysis'])
 
 
     if box == 'Overall Analysis':
@@ -63,9 +62,27 @@ def load_Project_page():
         fig.update_layout(width=1400, height=600)
         st.plotly_chart(fig)
 
+    elif box== 'Country_Wise Analysis':
+        st.title('Country_Wise Analysis')
+
+        st.header('Top 20 Countries have most jobs')
+        aa2 = df.country.value_counts().head(20).reset_index(name='counts').rename(columns={'index': 'country'})
+        fig=px.bar(aa2, x='country', y='counts', text_auto=True)
+        fig.update_layout(width=1400,height=500)
+        st.plotly_chart(fig)
 
 
+        st.header('Top 20 Countries have most Jobs-Type')
+        cc = df.country.value_counts(ascending=False).head(20).index.to_list()
+        pivot = df[df['country'].isin(cc)].pivot_table(index='country', columns='job_type', aggfunc='size').fillna(
+                '0')
+        pivot = pivot.drop(columns=[' Part-time,Traineeship', ' Traineeship,Part-time'])
 
+        pivot = pivot.stack()
+        pivot = pivot.reset_index(name='counts')
+        fig=px.bar(pivot, x='country', y='counts', color='job_type', barmode='group', text='counts', log_y=True,color_continuous_scale='viridis')
+        fig.update_layout(width=1400,height=500)
+        st.plotly_chart(fig)
 
 
     elif box == 'Country_Wise Analysis':
