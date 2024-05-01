@@ -17,8 +17,8 @@ def load_home_page():
     st.title('WELCOME TO HOME PAGE')
 
 def load_Project_page():
-    st.title('WELCOMR TO PROJECT PAGE ')
-
+    st.title('WELCOME TO PROJECT PAGE ')
+    
 def load_contact_page():
     st.title('WELCOME TO CONTACT PAGE')
 
@@ -28,20 +28,12 @@ st.sidebar.title('Startup Funding Analysis')
 option = st.sidebar.selectbox('select one',['Home Page', 'Project', 'contact'])
 
 
-
 if option == 'Home Page':
-    btn0=st.sidebar.button('Select the above page')
-    if btn0:
-        load_home_page()
+    load_home_page()
 
 elif option == 'Project':
-    btn1=st.sidebar.button('Select the above page')
-    if btn1:
-        load_Project_page()
+    load_Project_page()
 
 else:
-    btn2 = st.sidebar.button('Select the above page')
-    if btn2:
-        load_contact_page()
-
+    load_contact_page()
 
