@@ -149,7 +149,7 @@ def load_Project_page():
         fig.update_layout(width=1400,height=500)
         st.plotly_chart(fig)
 
-        
+
 
 
 
