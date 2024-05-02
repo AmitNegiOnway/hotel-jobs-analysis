@@ -115,7 +115,44 @@ def load_Project_page():
 
 
     elif box == 'Jobs Analysis':
-        st.header('Jobs Analysis')
+        st.title('Jobs Analysis')
+
+
+
+        st.header('most jobs type')
+        aa2 = df.job_type.value_counts().reset_index(name='counts').rename(columns={'index': 'jobs type'})
+        fig = px.bar(aa2, x='job_type', y='counts', text_auto=True)
+        fig.update_layout(width=1400, height=500)
+        st.plotly_chart(fig)
+
+
+        st.header('top 40 Countries give most internship')
+        cc = df.job_type.value_counts(ascending=False).head(1).index.to_list()
+        pivot = df[df['job_type'].isin(cc)].pivot_table(index='job_type', columns='country', aggfunc='size').fillna('0')
+        pivot = pivot.stack()
+        pivot = pivot.reset_index(name='counts')
+        pivot = pivot.sort_values(by='counts', ascending=False).head(40)
+        fig=px.bar(pivot, x='job_type', y='counts', color='country', barmode='group', text='counts', log_y=True,
+               color_continuous_scale='viridis')
+        fig.update_layout(width=1400,height=500)
+        st.plotly_chart(fig)
+
+
+
+        st.header('top Countries give most Apprenticeship')
+        cc = df[df.job_type == ' Apprenticeship'].job_type.value_counts(ascending=False).index.to_list()
+        pivot = df[df['job_type'].isin(cc)].pivot_table(index='job_type', columns='country', aggfunc='size').fillna('0')
+        pivot = pivot.stack()
+        pivot = pivot.reset_index(name='counts')
+        pivot = pivot.sort_values(by='counts', ascending=False).head(40)
+        fig=px.bar(pivot, x='job_type', y='counts', color='country', barmode='group', text='counts', log_y=True, color_continuous_scale='viridis')
+        fig.update_layout(width=1400,height=500)
+        st.plotly_chart(fig)
+
+        
+
+
+
 
     else:
         st.header('Company_Wise Analysis')
