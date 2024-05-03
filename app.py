@@ -12,7 +12,12 @@ st.set_page_config(layout='wide', page_title='ONWAY.COM')
 
 # Define page functions
 def load_home_page():
-    st.title('WELCOME TO HOME PAGE')
+    st.title('Welcome To Onway.com')
+    st.image('Hotel-jobs imga.jpg')
+    st.write('Welcome to Hotels Jobs Analysis, your premier destination for insightful analysis and comprehensive information on careers within the hospitality industry.')
+    st.write("Discovering the perfect job in the hotel sector can be a daunting task, but with our expertise and resources, we make it easier than ever. Whether you're a seasoned professional looking for new opportunities or just starting your career journey, our platform offers valuable insights to guide you every step of the way.")
+    st.write("From entry-level positions to executive roles, we provide in-depth analysis of job trends, salary expectations, skill requirements, and career growth opportunities within the hotel industry. Our curated content helps you stay informed about the latest developments and industry best practices, ensuring you make informed decisions about your career path.")
+
 
 
 def load_Project_page():
