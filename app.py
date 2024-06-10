@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from plotly import express as px
 import seaborn as sns
+from sql import DB
 
 # Load your DataFrame
 df = pd.read_csv('new_data.csv')
@@ -22,7 +23,7 @@ def load_home_page():
 
 
 def load_Project_page():
-    st.title('WELCOME TO PROJECT PAGE ')
+    st.title('WELCOME TO PYTHON PROJECT PAGE ')
 
 
     box= st.selectbox('Select one',['Overall Analysis', 'Country_Wise Analysis', 'Jobs Analysis', 'Company_Wise Analysis'])
@@ -265,18 +266,112 @@ def load_contact_page():
     st.markdown('https://public.tableau.com/app/profile/amit.negi4750/vizzes')
     st.markdown('amitnegionway@gmail.com')
 
-option = st.sidebar.selectbox('select one', ['Home Page', 'Project', 'About','Contact'])
+def load_SQL_project_page():
+
+
+    st.title('WELCOME TO SQL PROJECT')
+
+
+
+    db = DB()
+
+    st.sidebar.subheader('Resort Analysis')
+    user_option = st.sidebar.selectbox('Menu', ['Resort-Wise Analysis', 'Place-Wise Analysis', 'Price-Wise Analysis'])
+    if user_option == 'Resort-Wise Analysis':
+
+        st.title('Resort-Wise Analysis')
+
+        name = db.fetch_resort()
+
+        sorce = st.selectbox('name', sorted(name))
+
+        if st.button('show detail'):
+            result = db.show_fetch_resort(sorce)
+
+            st.dataframe(result)
+
+        st.subheader('PLACE')
+
+        data = db.fetch_place()
+        selected = st.selectbox('location', sorted(data))
+        rating = st.number_input('Rating Greater Than', step=1)
+        price = st.number_input('Price Less Than', step=50)
+
+        show_fetch_places = db.show_fetch_places(selected, rating, price)
+        st.dataframe(show_fetch_places)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+option = st.sidebar.selectbox('select one', ['Home Page', 'Python Project','SQL Project', 'About','Contact'])
 
 # Routing logic
 
 if option == 'Home Page':
     load_home_page()
 
-elif option == 'Project':
+elif option == 'Python Project':
     load_Project_page()
 
 elif option == 'About':
     load_about_page()
+
+elif option == "SQL Project":
+    load_SQL_project_page()
 
 else:
     load_contact_page()
