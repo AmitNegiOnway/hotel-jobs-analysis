@@ -12,7 +12,7 @@ st.set_page_config(layout='wide', page_title='ONWAY.COM')
 
 # Define page functions
 def load_home_page():
-    st.title('Welcome To Onway.com')
+    st.title("Navigate Your Dreams: Onway.com")
     st.image('Hotel-jobs imga.jpg')
     st.write('Welcome to Hotels Jobs Analysis, your premier destination for insightful analysis and comprehensive information on careers within the hospitality industry.')
     st.write("Discovering the perfect job in the hotel sector can be a daunting task, but with our expertise and resources, we make it easier than ever. Whether you're a seasoned professional looking for new opportunities or just starting your career journey, our platform offers valuable insights to guide you every step of the way.")
