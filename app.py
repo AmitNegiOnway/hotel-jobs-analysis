@@ -20,6 +20,7 @@ def load_home_page():
 
 
 
+
 def load_Project_page():
     st.title('WELCOME TO PROJECT PAGE ')
 
@@ -107,13 +108,29 @@ def load_Project_page():
             st.dataframe(frame)
 
 
-        col1,col2=st.columns(2)
+
+        # Assuming df and btn are defined elsewhere
+
+        col1, empty_col, col2 = st.columns(3)  # Adjust the ratio as needed
+
         with col1:
             st.header('Cities In This Country Have Jobs')
             ss = df[df.country == btn].city.value_counts().reset_index(name='counts').rename(
                 columns={'index': 'city'}).head(20)
-            fig=px.pie(ss, values='counts', names='city')
+            fig = px.pie(ss, values='counts', names='city')
             st.plotly_chart(fig)
+
+        with empty_col:
+            pass  # This column will create the space between col1 and col2
+
+        with col2:
+            st.header('Hotel Names that Provide Jobs')
+            ss = df[df['country'] == btn].hotel_name.value_counts().reset_index(name='counts').rename(
+                columns={'index': 'country'})
+            st.dataframe(ss)
+
+
+
 
 
 
@@ -232,14 +249,29 @@ def load_Project_page():
 
 
 
+def load_about_page():
+    st.title('Mapping the Job Market: An In-Depth Analysis of Hosco Job Listings')
+    st.write("In the age of digital transformation, data analysis has become a pivotal tool for making informed decisions across various domains. Our project embarks on this journey by leveraging advanced data scraping and analysis techniques to derive meaningful insights from the Hosco website. Hosco, a prominent platform in the hospitality industry, provides a wealth of information that can be harnessed to understand trends, patterns, and opportunities within the sector.")
+
+    st.write("The project initiates with web scraping, utilizing Selenium to automate the process of extracting data from the Hosco website. Selenium's robust automation capabilities enable us to navigate the website efficiently, ensuring comprehensive data collection. Following the data acquisition, Beautiful Soup is employed to parse the HTML content, extracting relevant data encapsulated within the web pages.")
+
+    st.write("With the raw data at hand, we proceed to the crucial phase of data cleaning. This step involves meticulous processing to remove inconsistencies, handle missing values, and standardize the dataset, ensuring its readiness for analysis. Leveraging the powerful functionalities of the Pandas library, we conduct a thorough examination and manipulation of the data, preparing it for subsequent analytical procedures.")
+
+    st.write("The analysis phase employs Plotly and Seaborn libraries to visualize the data. Plotly's interactive visualizations, combined with Seaborn's statistical plotting capabilities, facilitate an in-depth exploration of the dataset. Through these visualizations, we can identify trends, outliers, and significant patterns, providing a comprehensive understanding of the underlying data.")
+
+    st.write("To present our findings and make the analysis accessible, we utilize Streamlit, an open-source app framework. Streamlit allows us to create an intuitive and interactive web application, showcasing our data analysis project in a user-friendly manner. This dynamic interface not only presents our insights effectively but also enables stakeholders to interact with the data, fostering a deeper engagement with the analysis.")
+
+    st.subheader("summary")
+    st.write("This project exemplifies the integration of modern data scraping, cleaning, and analysis techniques, culminating in an interactive and insightful presentation through Streamlit. By extracting and analyzing data from the Hosco website, we aim to deliver valuable insights into the hospitality industry, demonstrating the power of data-driven decision-making.")
 def load_contact_page():
-    st.title('WELCOME TO CONTACT PAGE')
 
+    st.subheader('Contact -')
 
-# Sidebar
-st.sidebar.title('Startup Funding Analysis')
+    st.markdown('https://github.com/AmitNegiOnway')
+    st.markdown('https://public.tableau.com/app/profile/amit.negi4750/vizzes')
+    st.markdown('amitnegionway@gmail.com')
 
-option = st.sidebar.selectbox('select one', ['Home Page', 'Project', 'contact'])
+option = st.sidebar.selectbox('select one', ['Home Page', 'Project', 'About','Contact'])
 
 # Routing logic
 
@@ -248,6 +280,9 @@ if option == 'Home Page':
 
 elif option == 'Project':
     load_Project_page()
+
+elif option == 'About':
+    load_about_page()
 
 else:
     load_contact_page()
