@@ -300,6 +300,10 @@ def load_SQL_project_page():
         show_fetch_places = db.show_fetch_places(selected, rating, price)
         st.dataframe(show_fetch_places)
 
+        st.subheader('Dashboard using tableau')
+        st.markdown('https://public.tableau.com/app/profile/amit.negi4750/viz/collegeproject_17180715236900/Dashboard1')
+        
+
 
 
 
