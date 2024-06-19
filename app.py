@@ -3,12 +3,11 @@ import pandas as pd
 from plotly import express as px
 import seaborn as sns
 from sql import DB
-
+st.set_page_config(layout='wide')
 # Load your DataFrame
 df = pd.read_csv('new_data.csv')
 df['country']=df.country.str.strip()
 # Streamlit setup
-st.set_page_config(layout='wide', page_title='ONWAY.COM')
 
 
 # Define page functions
@@ -53,14 +52,14 @@ def load_Project_page():
         with col1:
             st.subheader('Job Type')
 
-
             job_type_column_name = 'job_type'
 
             # Calculate job_type counts
             aa1 = df[job_type_column_name].value_counts().reset_index(name='counts')
+            aa1.columns = ['job_type', 'counts']  # Rename columns for clarity
 
             # Create pie chart
-            fig = px.pie(aa1, values='counts', names='index')  # Use 'index' for the job types
+            fig = px.pie(aa1, values='counts', names='job_type')  # Use column names
             st.plotly_chart(fig)
 
         with col2:
@@ -187,8 +186,8 @@ def load_Project_page():
         st.header('Company_Wise Analysis')
 
         st.header('Top 20 Companies have most jobs')
-        aa2 = df.hotel_name.value_counts().head(20).reset_index(name='counts').rename(columns={'index': 'Company'})
-        fig = px.bar(aa2, x='Company', y='counts', text_auto=True)
+        aa2 = df.hotel_name.value_counts().head(20).reset_index(name='counts').rename(columns={'index': 'hotel_name'})
+        fig = px.bar(aa2, x='hotel_name', y='counts', text_auto=True)
         fig.update_layout(width=1400, height=500)
         st.plotly_chart(fig)
 
@@ -216,9 +215,8 @@ def load_Project_page():
         col1,col2=st.columns(2)
         with col1:
 
-            sd = df[df.hotel_name == btn]['job_type'].value_counts().reset_index(name='count').rename(
-                columns={'index': 'job type'})
-            fig = px.bar(sd, x='job type', y='count', text_auto=True)
+            sd = df[df.hotel_name == btn]['job_type'].value_counts().reset_index(name='count').rename(columns={'index':'job type'})
+            fig = px.bar(sd, x='job_type', y='count', text_auto=True)
             st.plotly_chart(fig)
 
         with col2:
@@ -230,8 +228,8 @@ def load_Project_page():
         with col1:
             st.header('Cities Name Where The Jobs Is Available')
             ss = df[df.hotel_name == btn].city.value_counts().reset_index(name='counts').rename(
-                columns={'index': 'hotel_name'}).head(20)
-            fig = px.pie(ss, values='counts', names='hotel_name')
+                columns={'index': 'city'}).head(20)
+            fig = px.pie(ss, values='counts', names='city')
             fig.update_layout(width=500, height=400)
             st.plotly_chart(fig)
 
@@ -276,10 +274,12 @@ def load_SQL_project_page():
     db = DB()
 
     st.sidebar.subheader('Resort Analysis')
+
     user_option = st.sidebar.selectbox('Menu', ['Resort-Wise Analysis', 'Place-Wise Analysis', 'Price-Wise Analysis'])
     if user_option == 'Resort-Wise Analysis':
 
         st.title('Resort-Wise Analysis')
+        st.subheader('this is not working bcz they are connected our local database (MySQL DataBase)')
 
         name = db.fetch_resort()
 
@@ -303,62 +303,6 @@ def load_SQL_project_page():
         st.subheader('Dashboard using tableau')
         st.markdown('https://public.tableau.com/app/profile/amit.negi4750/viz/collegeproject_17180715236900/Dashboard1')
         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 option = st.sidebar.selectbox('select one', ['Home Page', 'Python Project','SQL Project', 'About','Contact'])
