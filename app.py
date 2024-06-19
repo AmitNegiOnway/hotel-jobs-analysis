@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import seaborn as sns
-from sql import DB
+#from sql import DB
 st.set_page_config(layout='wide')
 # Load your DataFrame
 df = pd.read_csv('new_data.csv')

@@ -1,5 +1,5 @@
-import mysql.connector
-from mysql.connector import Error
+#import mysql.connector
+#from mysql.connector import Error
 
 class DB:
     def __init__(self):
