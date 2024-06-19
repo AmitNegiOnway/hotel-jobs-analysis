@@ -1,13 +1,13 @@
 import streamlit as st
 import pandas as pd
-from plotly import express as px
+import plotly.express as px
 import seaborn as sns
-
+#from sql import DB
+st.set_page_config(layout='wide')
 # Load your DataFrame
 df = pd.read_csv('new_data.csv')
 df['country']=df.country.str.strip()
 # Streamlit setup
-st.set_page_config(layout='wide', page_title='ONWAY.COM')
 
 
 # Define page functions
@@ -22,7 +22,7 @@ def load_home_page():
 
 
 def load_Project_page():
-    st.title('WELCOME TO PROJECT PAGE ')
+    st.title('WELCOME TO PYTHON PROJECT PAGE ')
 
 
     box= st.selectbox('Select one',['Overall Analysis', 'Country_Wise Analysis', 'Jobs Analysis', 'Company_Wise Analysis'])
@@ -52,14 +52,14 @@ def load_Project_page():
         with col1:
             st.subheader('Job Type')
 
-
             job_type_column_name = 'job_type'
 
             # Calculate job_type counts
             aa1 = df[job_type_column_name].value_counts().reset_index(name='counts')
+            aa1.columns = ['job_type', 'counts']  # Rename columns for clarity
 
             # Create pie chart
-            fig = px.pie(aa1, values='counts', names='index')  # Use 'index' for the job types
+            fig = px.pie(aa1, values='counts', names='job_type')  # Use column names
             st.plotly_chart(fig)
 
         with col2:
@@ -186,8 +186,8 @@ def load_Project_page():
         st.header('Company_Wise Analysis')
 
         st.header('Top 20 Companies have most jobs')
-        aa2 = df.hotel_name.value_counts().head(20).reset_index(name='counts').rename(columns={'index': 'Company'})
-        fig = px.bar(aa2, x='Company', y='counts', text_auto=True)
+        aa2 = df.hotel_name.value_counts().head(20).reset_index(name='counts').rename(columns={'index': 'hotel_name'})
+        fig = px.bar(aa2, x='hotel_name', y='counts', text_auto=True)
         fig.update_layout(width=1400, height=500)
         st.plotly_chart(fig)
 
@@ -215,9 +215,8 @@ def load_Project_page():
         col1,col2=st.columns(2)
         with col1:
 
-            sd = df[df.hotel_name == btn]['job_type'].value_counts().reset_index(name='count').rename(
-                columns={'index': 'job type'})
-            fig = px.bar(sd, x='job type', y='count', text_auto=True)
+            sd = df[df.hotel_name == btn]['job_type'].value_counts().reset_index(name='count').rename(columns={'index':'job type'})
+            fig = px.bar(sd, x='job_type', y='count', text_auto=True)
             st.plotly_chart(fig)
 
         with col2:
@@ -229,8 +228,8 @@ def load_Project_page():
         with col1:
             st.header('Cities Name Where The Jobs Is Available')
             ss = df[df.hotel_name == btn].city.value_counts().reset_index(name='counts').rename(
-                columns={'index': 'hotel_name'}).head(20)
-            fig = px.pie(ss, values='counts', names='hotel_name')
+                columns={'index': 'city'}).head(20)
+            fig = px.pie(ss, values='counts', names='city')
             fig.update_layout(width=500, height=400)
             st.plotly_chart(fig)
 
@@ -265,18 +264,62 @@ def load_contact_page():
     st.markdown('https://public.tableau.com/app/profile/amit.negi4750/vizzes')
     st.markdown('amitnegionway@gmail.com')
 
-option = st.sidebar.selectbox('select one', ['Home Page', 'Project', 'About','Contact'])
+def load_SQL_project_page():
+
+
+    st.title('WELCOME TO SQL PROJECT')
+
+
+
+    db = DB()
+
+    st.sidebar.subheader('Resort Analysis')
+
+    user_option = st.sidebar.selectbox('Menu', ['Resort-Wise Analysis', 'Place-Wise Analysis', 'Price-Wise Analysis'])
+    if user_option == 'Resort-Wise Analysis':
+
+        st.title('Resort-Wise Analysis')
+        st.subheader('this is not working bcz they are connected our local database (MySQL DataBase)')
+
+        name = db.fetch_resort()
+
+        sorce = st.selectbox('name', sorted(name))
+
+        if st.button('show detail'):
+            result = db.show_fetch_resort(sorce)
+
+            st.dataframe(result)
+
+        st.subheader('PLACE')
+
+        data = db.fetch_place()
+        selected = st.selectbox('location', sorted(data))
+        rating = st.number_input('Rating Greater Than', step=1)
+        price = st.number_input('Price Less Than', step=50)
+
+        show_fetch_places = db.show_fetch_places(selected, rating, price)
+        st.dataframe(show_fetch_places)
+
+        st.subheader('Dashboard using tableau')
+        st.markdown('https://public.tableau.com/app/profile/amit.negi4750/viz/collegeproject_17180715236900/Dashboard1')
+        
+
+
+option = st.sidebar.selectbox('select one', ['Home Page', 'Python Project','SQL Project', 'About','Contact'])
 
 # Routing logic
 
 if option == 'Home Page':
     load_home_page()
 
-elif option == 'Project':
+elif option == 'Python Project':
     load_Project_page()
 
 elif option == 'About':
     load_about_page()
+
+elif option == "SQL Project":
+    load_SQL_project_page()
 
 else:
     load_contact_page()
